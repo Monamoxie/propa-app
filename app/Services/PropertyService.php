@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Models\Property;
-use Illuminate\Support\Facades\Log;
 
 class PropertyService
-{
+{    
+    /**
+     * @param object $data
+     *
+     * @return bool
+     */
     public function newFromApi(object $data): bool
     { 
         $property = new Property;
@@ -32,26 +36,41 @@ class PropertyService
         }
         return false;
     }
-
+    
+    /** 
+     * @return void
+     */
     public function list() 
     {
-        return Property::with(['propertyType'])->paginate(30);
+        return Property::with(['propertyType'])->paginate(15);
     }
-
+    
+    /** 
+     * @return bool
+     */
     public function delete(int $id): ?bool
     {
         return Property::where('id', $id)->delete();
     }
-
-    public function search(?string $town, ?string $numBedrooms, ?string $price, 
-        ?string $propertyTypeId, ?string $type) 
+    
+    /** 
+     * @param null|string $town 
+     * @param null|string $numBedrooms 
+     * @param null|string $price 
+     * @param null|string $propertyTypeId 
+     * @param null|string $type 
+     *
+     * @return void
+     */
+    public function search(?string $town, ?string $numBedrooms, ?string $price, ?string $propertyTypeId, ?string $type) 
     {
         return Property::with(['PropertyType'])
-        ->where('town', 'LIKE', "%{$town}%")
-        ->where('num_bedrooms', 'LIKE', "%{$numBedrooms}%")
-        ->where('price', 'LIKE', "%{$price}%")
-        ->where('property_type_id', 'LIKE', "%{$propertyTypeId}%")
-        ->where('type', 'LIKE', "%{$type}%")
-        ->paginate(30);
+            ->where('town', 'LIKE', "%{$town}%")
+            ->where('num_bedrooms', 'LIKE', "%{$numBedrooms}%")
+            ->where('price', 'LIKE', "%{$price}%")
+            ->where('property_type_id', 'LIKE', "%{$propertyTypeId}%")
+            ->where('type', 'LIKE', "%{$type}%")
+            ->paginate(15);
     }
+
 }

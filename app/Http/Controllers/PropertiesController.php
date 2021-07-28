@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-ini_set('max_execution_time', 600);
+ini_set('max_execution_time', 1200);
 
 use App\Models\Property;
 use App\Services\PropertyService;
@@ -12,22 +12,30 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class PropertiesController extends Controller
-{
+{    
+    /**
+     *
+     * @param Request $request 
+     * @param PropertyTypeService $propertyTypeService  
+     * @param PropertyService $propertyService
+     *
+     * @return void
+     */
     public function loadFromApi(Request $request, PropertyTypeService $propertyTypeService, PropertyService $propertyService)
     {  
-        $nextPageUrl = 'https://trial.craig.mtcserver15.com/api/properties';
+        $nextPageUrl = config('propa.api_endpoint');
         $currPage = 1; $lastPage = 2;
-        while ($currPage < 2) {
+        while ($currPage < $lastPage) {
             $response = Http::get($nextPageUrl, [
-                'api_key' => '2S7rhsaq9X1cnfkMCPHX64YsWYyfe1he',
+                'api_key' => config('propa.api_key'),
                 'page[size]' => 100,
                 'page[number]' => $currPage
             ]);
             if ($response->successful()) {
                 $content = json_decode($response->body());
-                $currPage = $content->current_page + 1;
+                $currPage++;
                 $lastPage = $content->last_page;
-                Log::error('Current Page', [$currPage]);
+                Log::info('Page => ', [$currPage]);
                 $data = $content->data;
                 if (count($data) > 0) {
                     foreach ($data as $propa) {
@@ -41,22 +49,35 @@ class PropertiesController extends Controller
                 }
                 
             } else {
-               Log::error('An error occured loading the properties', []);
-               break;
+                Log::error('An error occured loading the properties', []);
+                break;
             }
         }
- 
         return redirect('/')->with('status', 'API call has been successfully loaded!');
     }
-
+    
+    /** 
+     * @param Request $request 
+     * @param PropertyService $propertyService
+     * @param PropertyTypeService $propertyTypeService
+     *
+     * @return void
+     */
     public function index(Request $request, PropertyService $propertyService, PropertyTypeService $propertyTypeService)
-    { 
+    {  
         return view('welcome', [
             'properties' => $propertyService->list(),
             'propertyTypes' => $propertyTypeService->distinct()
         ]);
     }
-
+    
+    /** 
+     * @param Request $request
+     * @param Property $property
+     * @param PropertyService $propertyService
+     *
+     * @return void
+     */
     public function delete(Request $request, Property $property, PropertyService $propertyService)
     { 
         if (!$propertyService->delete($property->id)) {
@@ -64,7 +85,14 @@ class PropertiesController extends Controller
         }
         return redirect('/')->with('status', 'Property has been successfully deleted!');
     }
-
+    
+    /** 
+     * @param Request $request
+     * @param PropertyService $propertyService
+     * @param PropertyTypeService $propertyTypeService
+     *
+     * @return void
+     */
     public function search(Request $request, PropertyService $propertyService, PropertyTypeService $propertyTypeService)
     { 
         return view('welcome', [
@@ -75,7 +103,12 @@ class PropertiesController extends Controller
             'propertyTypes' => $propertyTypeService->distinct()
         ]);
     }
-
+    
+    /**
+     * @param ?string $string
+     *
+     * @return string
+     */
     protected function clean(?string $string): ?string
     {
         return $string !== null ? preg_replace("#[^a-z0-9 ]#i", "", $string) : null;
