@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PropertiesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PropertiesController::class, 'index']);
+Route::get('/property/load', [PropertiesController::class, 'loadFromApi']);
+Route::get('/property/delete/{property}', [PropertiesController::class, 'delete']);
+Route::get('/property/search', [PropertiesController::class, 'search']);
