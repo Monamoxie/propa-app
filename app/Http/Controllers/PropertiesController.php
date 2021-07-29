@@ -35,7 +35,6 @@ class PropertiesController extends Controller
                 $content = json_decode($response->body());
                 $currPage++;
                 $lastPage = $content->last_page;
-                Log::info('Page => ', [$currPage]);
                 $data = $content->data;
                 if (count($data) > 0) {
                     foreach ($data as $propa) {
