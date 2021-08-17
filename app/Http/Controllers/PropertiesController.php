@@ -31,8 +31,10 @@ class PropertiesController extends Controller
                 'page[size]' => 100,
                 'page[number]' => $currPage
             ]);
+            
             if ($response->successful()) {
                 $content = json_decode($response->body());
+                dd($content);
                 $currPage++;
                 $lastPage = $content->last_page;
                 $data = $content->data;
