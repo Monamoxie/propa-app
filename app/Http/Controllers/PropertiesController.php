@@ -13,49 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class PropertiesController extends Controller
 {    
-    /**
-     *
-     * @param Request $request 
-     * @param PropertyTypeService $propertyTypeService  
-     * @param PropertyService $propertyService
-     *
-     * @return void
-     */
-    public function loadFromApi(Request $request, PropertyTypeService $propertyTypeService, PropertyService $propertyService)
-    {  
-        $nextPageUrl = config('propa.api_endpoint');
-        $currPage = 1; $lastPage = 2;
-        while ($currPage < $lastPage) {
-            $response = Http::get($nextPageUrl, [
-                'api_key' => config('propa.api_key'),
-                'page[size]' => 100,
-                'page[number]' => $currPage
-            ]);
-            
-            if ($response->successful()) {
-                $content = json_decode($response->body());
-                dd($content);
-                $currPage++;
-                $lastPage = $content->last_page;
-                $data = $content->data;
-                if (count($data) > 0) {
-                    foreach ($data as $propa) {
-                        DB::beginTransaction();
-                        if ($propertyTypeService->newFromApi($propa->property_type)) {
-                            unset($propa->property_type);
-                            $propertyService->newFromApi($propa);
-                        }
-                        DB::commit();
-                    }
-                }
-                
-            } else {
-                Log::error('An error occured loading the properties', []);
-                break;
-            }
-        }
-        return redirect('/')->with('status', 'API call has been successfully loaded!');
-    }
     
     /** 
      * @param Request $request 

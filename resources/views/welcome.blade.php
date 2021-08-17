@@ -16,7 +16,6 @@
         <nav class="navbar navbar-expand-lg navbar-light py-lg-2 py-2">
             <div class="container">
                 <a class="navbar-brand" href="/"><span class="">Propa-</span>app</a>
-                <a class="btn btn-secondary lg-btn-orange" href="/property/load"><span class="fa fa-bank"></span> Call Loader  </a>
             </div>
         </nav>
     </section>
