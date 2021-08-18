@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="/css/style.css" rel="stylesheet" />
+    <link href="{{ asset('/css/style.css') }}" rel="stylesheet" />
 </head>
 <body class="antialiased">
     <section class="propa-header">
@@ -100,7 +100,7 @@
                         @foreach ($properties as $property)
                         <div class="propa-box-info col-lg-4 col-md-6">
                             <a href="/">
-                                <img src="{{ $property->image_full }}" class="img-fluid" alt="">
+                                <img src="{{  asset("storage/" . $property->image_full) }}" class="img-fluid" alt="">
                             </a>
                             <p>{{ ucfirst($property->type) }}</p>
                             <div class="info-bg">
