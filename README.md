@@ -6,11 +6,8 @@
 Load thousands of data from remote API and populate to a MYSQL database
 
 
-## TODO
- - Lazy load images for speedy rendering
- - A CRUD interface to manually enter records as an alternaticve to remote loading
- - Automatical image resizing during upload and thumbnail generation
- - Unit and feature tests 
+## TODO 
+ - Unit tests 
  - A permission based system for certain CRUD actions
 
 <p align="left"><img src="/public/images/snapshot.png"></p>
