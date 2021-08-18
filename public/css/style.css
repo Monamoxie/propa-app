@@ -391,16 +391,24 @@ video {
 }
 .propa-box-info .bt-row a {
   font-size: 12px;
-  padding: 3px;
+  padding: 3px 4px;
 }
-.propa-properties-wrapper form .search-term {
+form .search-term {
   position: relative;
 }
-.propa-properties-wrapper form .search-term button {
+form .search-term button {
   position: absolute;
   margin-top: 25px;
 }
- 
+.property-viewer  {
+  padding: 15px;
+}
+.property-viewer p span {
+  font-weight: bold;
+}
+.property-viewer img {
+  max-width: 100%;
+}
 .propa-mini-hero .inner-cover {
   background: url(../images/mini-hero.jpg) no-repeat center;
   /* background-attachment: fixed; */
@@ -685,6 +693,19 @@ video {
   background-color: #fff;
   border: none;
 }
+.form-container {
+  max-width: 600px;
+  margin: 20px auto !important;
+  padding: 15px; 
+}
+.form-container .form-group {
+  margin-top: 10px;
+}
+.img-prev img {
+  max-width: 150px;
+  max-height: 150px;
+}
+
 @media (max-width: 992px) {
   .propa-header .navbar-expand-lg .navbar-nav .dropdown-menu {
     transform: translateX(0px);
@@ -730,3 +751,4 @@ video {
   border-color: none !important;
   box-shadow: none !important;
 }
+

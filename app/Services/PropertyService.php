@@ -7,6 +7,7 @@ use App\Models\Property;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PropertyService
 {    
@@ -47,6 +48,72 @@ class PropertyService
         
         return false;
     }
+
+    /**
+     * @param object $data
+     *
+     * @return bool
+     */
+    public function newFromForm(array $data): bool
+    {  
+            DB::beginTransaction();
+            $property = new Property;
+            $property->uuid = (string) Str::orderedUuid();
+            $property->property_type_id = $data['property_type'];
+            $property->county = $data['county'];
+            $property->country = $data['country'];
+            $property->town = $data['town'];
+            $property->description = $data['description'];
+            $property->address = $data['address'];
+            $property->image_full = $data['image_full'];
+            $property->image_thumbnail = $data['image_thumbnail'];
+            $property->latitude = $data['latitude'];
+            $property->longitude = $data['longitude'];
+            $property->num_bedrooms = $data['num_bedrooms'];
+            $property->num_bathrooms = $data['num_bathrooms'];
+            $property->price = $data['price'];
+            $property->type = $data['type'];
+            if ($property->save()) {
+                DB::commit();
+                return true;
+            }    
+        DB::rollBack();
+        return false;
+    }
+
+    /**
+     * @param object $data
+     *
+     * @return bool
+     */
+    public function update(array $data, int $id): bool
+    { 
+        $imageProcessor = new ImageProcessor; 
+            
+        $property = Property::where('id', $id)->first();
+        DB::beginTransaction();
+        $property->property_type_id = $data['property_type'];
+        $property->county = $data['county'];
+        $property->country = $data['country'];
+        $property->town = $data['town'];
+        $property->description = $data['description'];
+        $property->address = $data['address'];
+        $property->image_full = $data['image_full'];
+        $property->image_thumbnail = $data['image_thumbnail'];
+        $property->latitude = $data['latitude'];
+        $property->longitude = $data['longitude'];
+        $property->num_bedrooms = $data['num_bedrooms'];
+        $property->num_bathrooms = $data['num_bathrooms'];
+        $property->price = $data['price'];
+        $property->type = $data['type'];
+        if ($property->save()) {
+            DB::commit();
+            return true;
+        }    
+        
+        DB::rollBack();
+        return false;
+    }
     
     /**
      * @param string $uuid
@@ -63,7 +130,7 @@ class PropertyService
      */
     public function list() 
     {
-        return Property::with(['propertyType'])->paginate(15);
+        return Property::with(['propertyType'])->latest()->paginate(15);
     }
     
     /** 
@@ -137,6 +204,11 @@ class PropertyService
     protected function refreshTable()
     {
         return DB::table('properties')->delete();
+    }
+
+    public function getById(int $id)
+    {
+        return Property::with('propertyType')->where('id', $id)->first();
     }
 
 }

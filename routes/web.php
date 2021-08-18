@@ -16,5 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PropertiesController::class, 'index']);
 Route::get('/property/load', [PropertiesController::class, 'loadFromApi']);
+
+Route::post('/property/store', [PropertiesController::class, 'store']);
+Route::get('/property/create', [PropertiesController::class, 'create']);
+Route::get('/property/view/{property}', [PropertiesController::class, 'view']);
+Route::get('/property/edit/{property}', [PropertiesController::class, 'edit']);
+Route::post('/property/update/{property}', [PropertiesController::class, 'update']);
 Route::get('/property/delete/{property}', [PropertiesController::class, 'delete']);
 Route::get('/property/search', [PropertiesController::class, 'search']);
